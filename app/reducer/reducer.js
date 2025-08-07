@@ -1,4 +1,4 @@
-'use client'
+
 
 export default function reducer(currentState, action){
     switch(action.type){
