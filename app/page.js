@@ -17,8 +17,8 @@ export default function Home() {
 
 
   const addNewTask = ()=>{
-    dispatch({type:"added", payload:{newTask:task}})
     if (task.trim() ==='') return;
+    dispatch({type:"added", payload:{newTask:task}})
       setTask('')
     };
   
