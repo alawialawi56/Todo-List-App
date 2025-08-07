@@ -21,6 +21,10 @@ export default function reducer(currentState, action){
             const newTodos = currentState.filter((_, i)=> i !==action.payload.index)
             localStorage.setItem("todo", JSON.stringify(newTodos))
             return newTodos
+        }case "get":{
+            const showData = JSON.parse(localStorage.getItem("todo"))
+            return showData
+
         }
         default:{
             throw Error("Unknown Action " + action.type)
