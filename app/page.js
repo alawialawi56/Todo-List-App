@@ -58,10 +58,7 @@ export default function Home() {
           setEdit('');
         }}}
 
-      useEffect(()=>{
-        const showData = JSON.parse(localStorage.getItem("todo"))
-        setTodos(showData)
-      },[])
+      useEffect(()=>{dispatch({type:"get"}) },[])
 
       const editRef = useRef(null);
       useEffect(() => {
