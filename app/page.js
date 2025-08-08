@@ -11,7 +11,7 @@ import reducer from './reducer/reducer'
 export default function Home() {
   const [todos2,setTodos]= useState([]);
   const [task,setTask]= useState('');
-  const [fillter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('all');
   const [editIndex, setIndex] = useState(null);
   const [edit, setEdit] = useState('');
   const [todos, dispatch] = useReducer(reducer, [])
@@ -35,10 +35,10 @@ export default function Home() {
     };
 
     const filteredTodos = useMemo(()=>{
-      if (fillter === "completed") return todos.filter((t)=> t.completed);
-      if (fillter === "notCompleted") return todos.filter((t)=> !t.completed);
+      if (filter === "completed") return todos.filter((t)=> t.completed);
+      if (filter === "notCompleted") return todos.filter((t)=> !t.completed);
       return todos
-    }, [todos,fillter])
+    }, [todos,filter])
 
     const handleEditClick = (index)=>{
         setIndex(index);
@@ -110,13 +110,13 @@ export default function Home() {
         </Box>
 
         <Box sx={{ display:"flex", justifyContent:"center", gap:2, mb:2}}>
-          <Button variant={fillter ==='all' ? 'contained' : 'outlined'} onClick={()=> setFilter('all')}>
+          <Button variant={filter ==='all' ? 'contained' : 'outlined'} onClick={()=> setFilter('all')}>
             All
           </Button>
-          <Button variant={fillter ==='completed' ? 'contained' : 'outlined'} onClick={()=> setFilter('completed')}>
+          <Button variant={filter ==='completed' ? 'contained' : 'outlined'} onClick={()=> setFilter('completed')}>
             completed
           </Button>
-          <Button variant={fillter ==='notCompleted' ? 'contained' : 'outlined'} onClick={()=> setFilter('notCompleted')}>
+          <Button variant={filter ==='notCompleted' ? 'contained' : 'outlined'} onClick={()=> setFilter('notCompleted')}>
             Not completed
           </Button>
         </Box>
