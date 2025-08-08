@@ -23,7 +23,7 @@ export default function reducer(currentState, action){
             return newTodos
         }case "get":{
             const showData = JSON.parse(localStorage.getItem("todo"))
-            return showData
+            return showData || []
 
         }
         default:{
