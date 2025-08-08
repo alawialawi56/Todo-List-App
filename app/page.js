@@ -13,7 +13,7 @@ export default function Home() {
   const [filter, setFilter] = useState('all');
   const [editIndex, setIndex] = useState(null);
   const [edit, setEdit] = useState('');
-  const [todos, dispatch] = useReducer(reducer, [])
+  const [todos, dispatch] = useReducer(reducer || [])
 
 
   const addNewTask = ()=>{
