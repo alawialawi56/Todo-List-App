@@ -1,5 +1,6 @@
 'use client'
 
+import Head from 'next/head';
 import {Box, TextField, Button, List, ListItem, ListItemText, IconButton,Typography, Paper} from '@mui/material';
 import { useEffect, useMemo, useState, useRef, useReducer } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,8 +10,8 @@ import reducer from './reducer/reducer'
 
 export default function Home() {
   const [todos2,setTodos]= useState([]);
-  const [task,setTask]= useState({});
-  const [filter, setFilter] = useState('all');
+  const [task,setTask]= useState('');
+  const [fillter, setFilter] = useState('all');
   const [editIndex, setIndex] = useState(null);
   const [edit, setEdit] = useState('');
   const [todos, dispatch] = useReducer(reducer, [])
@@ -18,12 +19,15 @@ export default function Home() {
 
   const addNewTask = ()=>{
     if (task.trim() ==='') return;
-    dispatch({type:"added", payload:{newTask:task}})
-      setTask('')
+    dispatch({type:"added", payload:{newTask:task,task:task}})
+    setTask('')
     };
   
   const toggleComplete = (index)=>{
-      dispatch({type:"toggle", payload:{index:index}})
+      const newTodos = [...todos];
+      newTodos[index].completed = !newTodos[index].completed;
+      localStorage.setItem("todo", JSON.stringify(newTodos))
+      setTodos(newTodos)
     };
 
     const deleteTodos = (index)=>{
@@ -31,13 +35,10 @@ export default function Home() {
     };
 
     const filteredTodos = useMemo(()=>{
-      return (todos|| []).filter((todo)=>{
-        if(filter === "completed") return todo.completed === true;
-        if(filter === "notCompleted") return todo.completed === false;
-        return true;
-    });
-
-    }, [todos,filter])
+      if (fillter === "completed") return todos.filter((t)=> t.completed);
+      if (fillter === "notCompleted") return todos.filter((t)=> !t.completed);
+      return todos
+    }, [todos,fillter])
 
     const handleEditClick = (index)=>{
         setIndex(index);
@@ -45,12 +46,9 @@ export default function Home() {
       }
 
       const handleEditKeyDown = (event)=>{
+        if (edit.trim() === '') return;
         if (event.key === 'Enter'){
-          if (edit.trim() === '') return;
-          const updateTodos = [...todos];
-          updateTodos[editIndex].text = edit;
-          setTodos(updateTodos)
-          localStorage.setItem("todo", JSON.stringify(updateTodos))
+          dispatch({type:"keyDown", payload:{editIndex:editIndex, edit:edit}})
           setIndex(null)
           setEdit('')
           if (event.key === 'Escape') {
@@ -58,7 +56,7 @@ export default function Home() {
           setEdit('');
         }}}
 
-      useEffect(()=>{dispatch({type:"get"}) },[])
+      useEffect(()=>{ dispatch({type:"get"}) },[])
 
       const editRef = useRef(null);
       useEffect(() => {
@@ -90,6 +88,11 @@ export default function Home() {
       margin:0,
       padding:0
     }}>
+      <Head>
+        <title>TO DO LIST</title>
+        <meta name="description" content='to do list app'/>
+      </Head>
+
       <Paper elevation={4} sx={{p:4, width:'70%', maxWidth:500, maxHeight:"80vh", overflow:"scroll"}}>
         <Typography variant='h5' align='left' gutterBottom>
           TO-Do List
@@ -107,13 +110,13 @@ export default function Home() {
         </Box>
 
         <Box sx={{ display:"flex", justifyContent:"center", gap:2, mb:2}}>
-          <Button variant={filter ==='all' ? 'contained' : 'outlined'} onClick={()=> setFilter('all')}>
+          <Button variant={fillter ==='all' ? 'contained' : 'outlined'} onClick={()=> setFilter('all')}>
             All
           </Button>
-          <Button variant={filter ==='completed' ? 'contained' : 'outlined'} onClick={()=> setFilter('completed')}>
+          <Button variant={fillter ==='completed' ? 'contained' : 'outlined'} onClick={()=> setFilter('completed')}>
             completed
           </Button>
-          <Button variant={filter ==='notCompleted' ? 'contained' : 'outlined'} onClick={()=> setFilter('notCompleted')}>
+          <Button variant={fillter ==='notCompleted' ? 'contained' : 'outlined'} onClick={()=> setFilter('notCompleted')}>
             Not completed
           </Button>
         </Box>
