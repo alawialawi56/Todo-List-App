@@ -31,7 +31,7 @@ export default function Home() {
     };
 
     const filteredTodos = useMemo(()=>{
-      return todos.filter((todo)=>{
+      return (todos|| []).filter((todo)=>{
         if(filter === "completed") return todo.completed === true;
         if(filter === "notCompleted") return todo.completed === false;
         return true;
